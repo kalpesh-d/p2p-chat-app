@@ -1,7 +1,7 @@
 const { generateToken } = require("../lib/utils.js")
 const User = require("../models/userModel.js")
 const bcrypt = require("bcryptjs")
-
+const cloudinary = require("../lib/cloudinary.js")
 const register = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -52,11 +52,13 @@ const login = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" })
     }
+    // Compare provided password with hashed password stored in database
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
     if (!isPasswordCorrect) {
       return res.status(400).json({ message: "Invalid email or password" })
     }
 
+    // Generate JWT token and set it in cookie
     generateToken(user._id, res)
 
     res.status(200).json({
@@ -82,4 +84,39 @@ const logout = (req, res) => {
   }
 }
 
-module.exports = { register, login, logout };
+const updateProfile = async (req, res) => {
+  try {
+    const { profilePicture } = req.body
+    const userId = req.user._id
+
+    if (!profilePicture) {
+      return res.status(400).json({ message: "Profile picture is required" })
+    }
+
+    // upload profile picture to cloudinary
+    const uploadRes = await cloudinary.uploader.upload(profilePicture)
+    // uploadRes.secure_url: Secure URL of the uploaded image from Cloudinary
+    // {new: true}: Return the updated document instead of the original
+    // This will update the user's profilePicture field with the new image URL
+    // and return the complete updated user object
+    const updatedUser = await User.findByIdAndUpdate(userId,
+      { profilePicture: uploadRes.secure_url }, { new: true })
+
+    res.status(200).json(updatedUser)
+  } catch (error) {
+    console.log(`Update profile error: ${error.message}`)
+    res.status(500).json({ message: "Internal server error" })
+  }
+}
+
+// check if user is authenticated
+const checkAuth = (req, res) => {
+  try {
+    res.status(200).json(req.user)
+  } catch (error) {
+    console.log(`Check auth error: ${error.message}`)
+    res.status(500).json({ message: "Internal server error" })
+  }
+}
+
+module.exports = { register, login, logout, updateProfile, checkAuth };
