@@ -4,7 +4,7 @@ const { register, login, logout } = require("../controller/authController.js");
 const authRouter = express.Router();
 
 authRouter.post("/register", register);
-authRouter.get("/login", login);
-authRouter.get("/logout", logout);
+authRouter.post("/login", login);
+authRouter.post("/logout", logout);
 
 module.exports = authRouter;
