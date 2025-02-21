@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+**/dist
+**/build
+**/.next
+**/.nuxt
+**/.vitepress/dist
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Frontend
+frontend/node_modules
+
+# Backend
+backend/node_modules
