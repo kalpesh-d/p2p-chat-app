@@ -1,7 +1,7 @@
 const AuthFormLayout = ({ children }) => {
   return (
-    <section className="container mx-auto">
-      <div className="flex justify-center items-center h-screen">
+    <section className="bg-[#8BABD8]">
+      <div className="container mx-auto flex justify-center items-center h-screen">
         <div className="w-md bg-white rounded-lg px-14 py-10 relative">
           <img
             src="/dottedShape.svg"

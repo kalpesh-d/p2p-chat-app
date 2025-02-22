@@ -5,7 +5,7 @@ const { getUsersForSidebar, getMessages, sendMessage } = require("../controller/
 
 const messageRouter = express.Router();
 
-messageRouter.get("/get", protectRoute, getUsersForSidebar);
+messageRouter.get("/users", protectRoute, getUsersForSidebar);
 messageRouter.get("/:id", protectRoute, getMessages);
 
 messageRouter.post("/send/:id", protectRoute, sendMessage);
