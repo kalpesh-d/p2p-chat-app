@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { fetchMessages } from "../store/slices/chatSlice";
 import { useDispatch } from "react-redux";
@@ -6,9 +6,11 @@ import { useEffect } from "react";
 import ChatHeader from "./ChatHeader.jsx";
 import MessageInput from "./MessageInput.jsx";
 import { format, isToday, isYesterday } from "date-fns";
+import Profile from "./Profile.jsx";
 
 const ChatContainer = () => {
-  const { messages, isMessagesLoading, selectedUser } = useSelector(state => state.chat);
+  const [showProfile, setShowProfile] = useState(false);
+  const { messages, isMessagesLoading, selectedUser, onlineUsers } = useSelector(state => state.chat);
   const { authUser } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
@@ -42,8 +44,13 @@ const ChatContainer = () => {
   const groupedMessages = groupMessagesByDate(messages);
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-50">
-      <ChatHeader />
+    <div className="flex-1 flex flex-col bg-gray-50 relative">
+      <ChatHeader onProfileClick={() => setShowProfile(!showProfile)} />
+
+      {/* User Profile Sidebar */}
+      {showProfile && <Profile selectedUser={selectedUser} onlineUsers={onlineUsers} setShowProfile={setShowProfile} />}
+
+
       <div className="flex-1 px-10 md:px-20 overflow-y-auto bg-gray-100">
         {Object.entries(groupedMessages).map(([date, dateMessages]) => (
           <div key={date}>

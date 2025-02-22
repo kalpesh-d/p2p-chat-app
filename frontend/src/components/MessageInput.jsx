@@ -23,7 +23,7 @@ const MessageInput = () => {
       <form onSubmit={handleSendMessage}>
         <div className="flex-1 flex items-center gap-2 outline-0 rounded-lg bg-white">
           <textarea
-            className="w-full pl-3 py-2 placeholder:text-sm focus:outline-none resize-none h-[50px] max-h-[120px] overflow-y-auto"
+            className="w-full pl-3 py-2 placeholder:text-sm focus:outline-none min-h-[50px] max-h-[120px] overflow-y-auto resize-none"
             placeholder="Type a message..."
             value={message}
             rows={1}
