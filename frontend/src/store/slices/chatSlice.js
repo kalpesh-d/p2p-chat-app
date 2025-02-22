@@ -8,11 +8,12 @@ const initialState = {
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  onlineUsers: [],
 };
 
 export const fetchUsers = createAsyncThunk(
   "chat/fetchUsers",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get("/messages/users");
       return res.data;
@@ -25,9 +26,22 @@ export const fetchUsers = createAsyncThunk(
 
 export const fetchMessages = createAsyncThunk(
   "chat/fetchMessages",
-  async (userId) => {
+  async (userId, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get(`/messages/${userId}`);
+      return res.data;
+    } catch (error) {
+      toast.error(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const sendMessage = createAsyncThunk(
+  "chat/sendMessage",
+  async ({ message, userId }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post(`/messages/send/${userId}`, { content: message });
       return res.data;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -42,7 +56,11 @@ const chatSlice = createSlice({
   reducers: {
     setSelectedUser: (state, action) => {
       state.selectedUser = action.payload;
+      state.messages = [];
     },
+    setOnlineUsers: (state, action) => {
+      state.onlineUsers = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -67,9 +85,20 @@ const chatSlice = createSlice({
       })
       .addCase(fetchMessages.rejected, (state) => {
         state.isMessagesLoading = false;
+      })
+      // Send message
+      .addCase(sendMessage.pending, (state) => {
+        state.isSendingMessage = true;
+      })
+      .addCase(sendMessage.fulfilled, (state, action) => {
+        state.isSendingMessage = false;
+        state.messages = [...state.messages, action.payload];
+      })
+      .addCase(sendMessage.rejected, (state) => {
+        state.isSendingMessage = false;
       });
   },
 });
 
-export const { setSelectedUser } = chatSlice.actions;
+export const { setSelectedUser, setOnlineUsers } = chatSlice.actions;
 export default chatSlice.reducer;

@@ -12,13 +12,12 @@ function Home() {
   return (
     <section className="h-screen bg-base-200">
       <div className="flex items-center px-4">
-        <div className="rounded-lg w-full max-w-6xl h-[calc(100vh)] bg-base-200">
+        <div className="rounded-lg w-full h-[calc(100vh)] bg-base-200">
           <div className="flex h-full rounded-lg overflow-hidden">
             <SideBar />
 
             {!selectedUser ? <NoChat /> : <ChatContainer />}
           </div>
-
         </div>
       </div>
     </section>

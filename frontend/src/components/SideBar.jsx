@@ -6,17 +6,16 @@ import Avatar from "./Avatar";
 
 const SideBar = () => {
   const [search, setSearch] = useState("");
-  const { users, selectedUser, isUserLoading } = useSelector(state => state.chat);
+  const { users, selectedUser, isUserLoading, onlineUsers } = useSelector(state => state.chat);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const onlineUsers = []
   const filteredUsers = users.filter(user => user.name.toLowerCase().includes(search.toLowerCase()));
 
-  if (isUserLoading) return <div>Loading...</div>;
+  if (isUserLoading) return <div className="h-screen flex items-center justify-center border-r border-[#D9DCE0]">Loading...</div>;
 
   return (
     <aside className="h-full w-40 lg:w-88 border-r border-[#D9DCE0] flex flex-col items-baseline transition-all duration-200 pr-4">
