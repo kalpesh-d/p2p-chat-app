@@ -6,7 +6,6 @@ import AuthFormLayout from '../components/AuthFormLayout';
 import { signUp } from '../store/slices/authSlice';
 
 import toast from 'react-hot-toast';
-import { LoaderCircle } from 'lucide-react';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -56,16 +55,8 @@ function Register() {
         </div>
 
         <div className="my-8">
-          <button className="btn-primary" type="submit" disabled={isSigningUp}>
-            {
-              isSigningUp ?
-                <>
-                  <LoaderCircle className="animate-spin" />
-                  Signing Up...
-                </>
-                :
-                'Sign Up'
-            }
+          <button className={`${isSigningUp ? "btn-disabled" : "btn-primary"}`} disabled={isSigningUp}>
+            {isSigningUp ? "Signing Up..." : 'Sign Up'}
           </button>
         </div>
       </form>
@@ -78,7 +69,7 @@ function Register() {
           </Link>
         </p>
       </div>
-    </AuthFormLayout>
+    </AuthFormLayout >
   );
 }
 

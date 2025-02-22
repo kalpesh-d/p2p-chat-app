@@ -14,3 +14,7 @@ body{
 .btn-primary {
   @apply w-full p-2 rounded-md bg-[#6E80A4] text-white hover:bg-[#5A6A8A] transition-colors duration-200 cursor-pointer;
 }
+
+.btn-disabled {
+  @apply w-full p-2 rounded-md bg-gray-400 text-white;
+}
