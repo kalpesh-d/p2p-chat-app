@@ -16,6 +16,7 @@ function Register() {
 
   const { isSigningUp } = useSelector(state => state.auth);
   const dispatch = useDispatch();
+
   const validateForm = () => {
     if (!formData.name || !formData.email || !formData.password) {
       toast.error("Please fill all fields");
