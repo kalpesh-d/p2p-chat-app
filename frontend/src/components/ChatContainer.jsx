@@ -12,8 +12,8 @@ import { groupMessagesByDate } from "../lib/messageDate";
 const ChatContainer = () => {
   const [showProfile, setShowProfile] = useState(false);
 
-  const { messages, isMessagesLoading, selectedUser, onlineUsers } = useSelector(state => state.chat);
-  const { authUser } = useSelector(state => state.auth);
+  const { messages, isMessagesLoading, selectedUser } = useSelector(state => state.chat);
+  const { authUser, onlineUsers } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
 
@@ -72,8 +72,8 @@ const ChatContainer = () => {
       {showProfile && (
         <div className="w-[300px] border-l border-[#D9DCE0] bg-white">
           <Profile
-            selectedUser={selectedUser}
             onlineUsers={onlineUsers}
+            selectedUser={selectedUser}
             setShowProfile={setShowProfile}
           />
         </div>

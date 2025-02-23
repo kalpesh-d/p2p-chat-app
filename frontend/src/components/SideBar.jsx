@@ -6,7 +6,8 @@ import Avatar from "./Avatar";
 
 const SideBar = () => {
   const [search, setSearch] = useState("");
-  const { users, selectedUser, isUserLoading, onlineUsers } = useSelector(state => state.chat);
+  const { users, selectedUser, isUserLoading } = useSelector(state => state.chat);
+  const { onlineUsers } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
   useEffect(() => {

@@ -8,7 +8,6 @@ const initialState = {
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
-  onlineUsers: [],
 };
 
 export const fetchUsers = createAsyncThunk(

@@ -7,6 +7,8 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 
 import { checkAuth } from "./store/slices/authSlice";
+import { socketService } from "./lib/socket.js";
+import { setOnlineUsers } from "./store/slices/authSlice";
 
 import { LoaderCircle } from "lucide-react";
 import { Toaster } from "react-hot-toast";
@@ -19,6 +21,14 @@ function App() {
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (authUser) {
+      socketService.onOnlineUsers((users) => {
+        dispatch(setOnlineUsers(users));
+      });
+    }
+  }, [authUser, dispatch]);
 
   if (isCheckingAuth && !authUser) {
     return (

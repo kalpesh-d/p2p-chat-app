@@ -4,7 +4,9 @@ import { X } from "lucide-react";
 import { setSelectedUser } from "../store/slices/chatSlice";
 
 const ChatHeader = ({ onProfileClick }) => {
-  const { selectedUser, onlineUsers } = useSelector(state => state.chat);
+  const { onlineUsers } = useSelector(state => state.auth);
+  const { selectedUser } = useSelector(state => state.chat);
+
   const dispatch = useDispatch();
 
   return (
@@ -14,7 +16,9 @@ const ChatHeader = ({ onProfileClick }) => {
           <Avatar user={selectedUser} onlineUsers={onlineUsers} />
           <div className="text-left">
             <p className="text-lg font-medium">{selectedUser.name}</p>
-            <p className="text-sm text-[#6E80A4]">{onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}</p>
+            <p className="text-sm text-[#6E80A4]">
+              {onlineUsers.includes(selectedUser._id) ? "Online" : "Offline"}
+            </p>
           </div>
         </button>
 

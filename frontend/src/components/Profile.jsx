@@ -1,6 +1,6 @@
 import Avatar from "./Avatar";
 
-const Profile = ({ selectedUser, onlineUsers, setShowProfile }) => {
+const Profile = ({ selectedUser, setShowProfile, onlineUsers }) => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">

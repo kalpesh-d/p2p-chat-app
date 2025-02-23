@@ -8,8 +8,7 @@ const authRouter = require("./routes/authRouter.js");
 const messageRouter = require("./routes/messageRouter.js");
 
 dotenv.config();
-
-const app = express();
+const { app, server } = require("./lib/socket.js");
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
@@ -22,7 +21,7 @@ app.use(cors({
 app.use("/api/auth", authRouter);
 app.use("/api/messages", messageRouter);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connectDB();
 })

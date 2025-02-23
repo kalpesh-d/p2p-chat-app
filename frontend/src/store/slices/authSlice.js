@@ -1,20 +1,27 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
+import { socketService } from "../../lib/socket.js";
 
 const initialState = {
   authUser: null,
   isSigningUp: false,
   isLoggingIn: false,
   isCheckingAuth: true,
+  onlineUsers: [],
 };
 
-// Create async thunks for API calls
 export const checkAuth = createAsyncThunk(
   'auth/checkAuth',
-  async () => {
-    const res = await axiosInstance.get("/auth/check");
-    return res.data;
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get("/auth/check");
+      socketService.connect(res.data._id);
+      return res.data;
+    } catch (error) {
+      console.log("Error in checkAuth:", error);
+      return rejectWithValue(error.response?.data || { message: "Authentication failed" });
+    }
   }
 );
 
@@ -23,7 +30,8 @@ export const signUp = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.post("/auth/register", userData);
-      toast.success("Sign up successful");
+      toast.success("Account created successfully");
+      socketService.connect(res.data._id);
       return res.data;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -37,7 +45,8 @@ export const signOut = createAsyncThunk(
   async () => {
     try {
       await axiosInstance.get("/auth/signout");
-      toast.success("Sign out successful");
+      toast.success("Signed out successfully");
+      socketService.disconnect();
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -49,7 +58,8 @@ export const signIn = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.post("/auth/login", userData);
-      toast.success("Login successful");
+      toast.success("Logged in successfully");
+      socketService.connect(res.data._id);
       return res.data;
     } catch (error) {
       toast.error(error.response.data.message);
@@ -61,7 +71,11 @@ export const signIn = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setOnlineUsers: (state, action) => {
+      state.onlineUsers = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Check Auth
@@ -107,4 +121,5 @@ const authSlice = createSlice({
   }
 });
 
+export const { setOnlineUsers } = authSlice.actions;
 export default authSlice.reducer;
