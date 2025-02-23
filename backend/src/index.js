@@ -1,18 +1,20 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
+import express from "express";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from 'url';
 
-const path = require("path");
+import connectDB from "./lib/db.js";
+import authRouter from "./routes/authRouter.js";
+import messageRouter from "./routes/messageRouter.js";
 
-const connectDB = require("./lib/db.js");
-const authRouter = require("./routes/authRouter.js");
-const messageRouter = require("./routes/messageRouter.js");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
-const { app, server } = require("./lib/socket.js");
+const { app, server } = await import("./lib/socket.js");
 const PORT = process.env.PORT || 3001;
-const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -25,13 +27,13 @@ app.use("/api/auth", authRouter);
 app.use("/api/messages", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.use(express.static(path.join(__dirname, "../../frontend/dist")));
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    res.sendFile(path.join(__dirname, "../../frontend", "dist", "index.html"));
   });
 }
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connectDB();
-})
+});
