@@ -8,6 +8,7 @@ const initialState = {
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  isSendingMessage: false,
 };
 
 export const fetchUsers = createAsyncThunk(
@@ -57,9 +58,9 @@ const chatSlice = createSlice({
       state.selectedUser = action.payload;
       state.messages = [];
     },
-    setOnlineUsers: (state, action) => {
-      state.onlineUsers = action.payload;
-    }
+    addMessage: (state, action) => {
+      state.messages.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -95,9 +96,9 @@ const chatSlice = createSlice({
       })
       .addCase(sendMessage.rejected, (state) => {
         state.isSendingMessage = false;
-      });
+      })
   },
 });
 
-export const { setSelectedUser, setOnlineUsers } = chatSlice.actions;
+export const { setSelectedUser, addMessage } = chatSlice.actions;
 export default chatSlice.reducer;

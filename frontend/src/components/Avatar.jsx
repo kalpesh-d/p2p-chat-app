@@ -1,6 +1,4 @@
 const Avatar = ({ user, profileSize, onlineUsers }) => {
-  console.log(`user._id = ${user._id}`);
-  console.log(`onlineUsers = ${onlineUsers}`);
   return (
     <div className="relative mx-auto lg:mx-0">
       <div className={`${profileSize ? profileSize : "size-14"} rounded-full bg-primary flex items-center justify-center bg-[#6E80A4] text-white`}>

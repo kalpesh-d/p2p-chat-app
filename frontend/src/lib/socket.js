@@ -24,6 +24,15 @@ class SocketService {
     if (!this.socket) return;
     this.socket.on("getOnlineUsers", callback);
   }
+  onNewMessage(callback) {
+    if (!this.socket) return;
+    this.socket.on("newMessage", callback);
+  }
+
+  offNewMessage() {
+    if (!this.socket) return;
+    this.socket.off("newMessage");
+  }
 }
 
 export const socketService = new SocketService();

@@ -1,3 +1,4 @@
+const { getReceiverSocketId, io } = require('../lib/socket');
 const Message = require('../models/messageModel')
 const User = require('../models/userModel')
 
@@ -35,6 +36,7 @@ const getMessages = async (req, res) => {
   }
 }
 
+// Send a message to a user
 const sendMessage = async (req, res) => {
   try {
     const { content } = req.body
@@ -46,8 +48,15 @@ const sendMessage = async (req, res) => {
       receiver: receiverId,
       content
     })
-
+    // Save the new message to the database
     await newMessage.save()
+
+    // Emit the new message to the receiver
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
     res.status(201).json(newMessage)
   } catch (error) {
     console.log("Error sending message", error.message)

@@ -22,7 +22,7 @@ const MessageInput = () => {
   };
 
   return (
-    <div className="py-4 w-full">
+    <div className="py-4 px-10 md:px-20 w-full">
       <form onSubmit={handleSendMessage}>
         <div className="flex-1 flex items-center gap-2 outline-0 rounded-lg bg-white">
           <input
